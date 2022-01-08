@@ -36,11 +36,11 @@ class HomePage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: Colors.lightBlue.shade50,
+              color: Colors.white,
               //border: Border.all(width: 5.0, color: Colors.blue),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.green.withOpacity(0.5),
                     offset: const Offset(2.0, 5.0),
                     blurRadius: 5.0,
                     spreadRadius: 2.0)
@@ -66,14 +66,14 @@ class HomePage extends StatelessWidget {
                       Text(
                         'GUESS',
                         style: TextStyle(
-                          color: Colors.cyan,
+                          color: Colors.lightGreen,
                           fontSize: 50.0,
                         ),
                       ),
                       Text(
                         'THE NUMBER',
                         style: TextStyle(
-                          color: Colors.deepPurple,
+                          color: Colors.orangeAccent,
                           fontSize: 25.0,
                         ),
                       ),
@@ -85,10 +85,14 @@ class HomePage extends StatelessWidget {
                 height: 20.0,
               ),
               const Padding(
-                padding:  EdgeInsets.all(32.0),
-                child:  TextField(),
+                padding: EdgeInsets.all(32.0),
+                child: TextField(),
               ),
-              ElevatedButton(onPressed: (){}, child: const Text('GUESS')),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('GUESS'),
+                style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+              ),
             ],
           ),
         ),
