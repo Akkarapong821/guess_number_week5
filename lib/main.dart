@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:guess_number_week4/game.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,13 +19,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  final _controller = TextEditingController();
+  var game = Game();
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +51,10 @@ class HomePage extends StatelessWidget {
                     spreadRadius: 2.0)
               ]),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Row(
+              Expanded(
+              child:Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
@@ -60,6 +66,7 @@ class HomePage extends StatelessWidget {
                       //fit: BoxFit.fill,
                     ),
                   ),
+
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -81,17 +88,66 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
+              ),
               const SizedBox(
                 height: 20.0,
               ),
-              const Padding(
-                padding: EdgeInsets.all(32.0),
-                child: TextField(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.7),
+                    border: OutlineInputBorder(),
+                    hintText: 'Guess the number between 1 to 100'
+                  ),
+                ),
               ),
               ElevatedButton(
-                onPressed: () {},
                 child: const Text('GUESS'),
+                onPressed: () {
+                  var input = _controller.text;
+                  var number = int.tryParse(input);
+                  String title = "Result";
+                  String content = "";
+                  if(number == null){
+                    title = "Error";
+                    content = "invalid input please only enter number";
+                  }
+                  else {
+                    var result = game.doGuess(number);
+                    if(result == 1){
+                      content = "> $number is TOO HIGH! , Please try again. <";
+                    } else if (result == -1){
+                      content = "> $number is TOO LOW! , Please try again. <";
+                    } else if (result == 0){
+                      content = "> $number is CORRECT! <, \ntotal guesses: ${game.guessCount}";
+                    }
+                  }
+                  {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text('Result'),
+                              content: Text(content),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'))
+                              ]);
+                        });
+                  };
+                },
                 style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+              ),
+              const SizedBox(
+                height: 20.0,
               ),
             ],
           ),
